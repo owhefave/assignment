@@ -7,7 +7,7 @@ int main() {
 
     while (1) {
         /* Display the shell prompt */
-        printf("simple_shell> ");
+        printf("#cisfun$ ");
         fflush(stdout);
 
         /* Read a command from the user */
@@ -42,7 +42,7 @@ int main() {
 
             if (child_pid == 0) {
                 /* Child process */
-                if (execlp(command, command, (char *)NULL) == -1) {
+                if (execlp("/bin/sh", "sh", "-c", command, (char *)NULL) == -1) {
                     /* Handle the case when the executable is not found */
                     perror("exec");
                     exit(EXIT_FAILURE);
