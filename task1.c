@@ -2,21 +2,25 @@
 
 #define MAX_COMMAND_LENGTH 128
 
-int main()
-{
-	char command[MAX_COMMAND_LENGTH];
-	
-	while (1)
-	{
-		/* Display the shell prompt */
-		printf("simple_shell> ");
-		fflush(stdout);
-		/* Read a command from the user */
-		if (fgets(command, sizeof(command), stdin) == NULL)
-		{
-			printf("\n");
-			break; /* Exit the shell on EOF (Ctrl+D)*/
-		}
+int main() {
+    char command[MAX_COMMAND_LENGTH];
+
+    while (1) {
+        // Display the shell prompt
+        printf("simple_shell> ");
+        fflush(stdout);
+
+        // Read a command from the user
+        if (fgets(command, sizeof(command), stdin) == NULL) {
+            if (feof(stdin)) {
+                // Exit the shell on EOF (Ctrl+D)
+                printf("\nExiting the shell. Goodbye!\n");
+                break;
+            } else {
+                perror("fgets");
+                exit(EXIT_FAILURE);
+            }
+        }
 
         // Remove the trailing newline character
         size_t cmd_len = strlen(command);
@@ -26,19 +30,31 @@ int main()
 
         // Execute the command
         if (strlen(command) > 0) {
-            if (fork() == 0) {
-                /* Child process */
+            pid_t child_pid = fork();
+
+            if (child_pid == -1) {
+                perror("fork");
+                exit(EXIT_FAILURE);
+            }
+
+            if (child_pid == 0) {
+                // Child process
                 if (execlp(command, command, (char *)NULL) == -1) {
                     // Handle the case when the executable is not found
-                    printf("simple_shell: %s: command not found\n", command);
-                    exit(1);
+                    perror("exec");
+                    exit(EXIT_FAILURE);
                 }
             } else {
-                /* Parent process */
-                wait(NULL); /* Wait for the child process to complete */
+                // Parent process
+                int status;
+                if (waitpid(child_pid, &status, 0) == -1) {
+                    perror("waitpid");
+                    exit(EXIT_FAILURE);
+                }
             }
         }
     }
 
     return 0;
 }
+
