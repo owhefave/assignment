@@ -1,16 +1,49 @@
-#include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
 
 #define MAX_COMMAND_LENGTH 128
+
+/* Display the shell prompt */
+void display_prompt() {
+    printf("#cisfun$ ");
+    fflush(stdout);
+}
+
+/* Execute the specified command */
+void execute_command(char *command) {
+    pid_t pid;
+
+    pid = fork();
+
+    if (pid == -1) {
+        /* Handle fork error */
+        perror("fork");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        /* Child process */
+        if (execlp(command, command, (char *)NULL) == -1) {
+            /* Handle the case when the executable is not found */
+            perror("exec");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        /* Parent process */
+        int status;
+        waitpid(pid, &status, 0);
+    }
+}
 
 int main() {
     char command[MAX_COMMAND_LENGTH];
 
     while (1) {
-        size_t cmd_len; /* Move the declaration to the beginning of the block */
+        size_t cmd_len;
 
-        /* Display the shell prompt */
-        printf("simple_shell> ");
-        fflush(stdout);
+        display_prompt();
 
         /* Read a command from the user */
         if (fgets(command, sizeof(command), stdin) == NULL) {
@@ -19,6 +52,7 @@ int main() {
                 printf("\nExiting the shell. Goodbye!\n");
                 break;
             } else {
+                /* Handle fgets error */
                 perror("fgets");
                 exit(EXIT_FAILURE);
             }
@@ -32,28 +66,7 @@ int main() {
 
         /* Execute the command */
         if (strlen(command) > 0) {
-            pid_t child_pid = fork();
-
-            if (child_pid == -1) {
-                perror("fork");
-                exit(EXIT_FAILURE);
-            }
-
-            if (child_pid == 0) {
-                /* Child process */
-                if (execlp(command, command, (char *)NULL) == -1) {
-                    /* Handle the case when the executable is not found */
-                    perror("exec");
-                    exit(EXIT_FAILURE);
-                }
-            } else {
-                /* Parent process */
-                int status;
-                if (waitpid(child_pid, &status, 0) == -1) {
-                    perror("waitpid");
-                    exit(EXIT_FAILURE);
-                }
-            }
+            execute_command(command);
         }
     }
 
