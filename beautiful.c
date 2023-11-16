@@ -6,6 +6,6 @@
 
 int main(void)
 {
-	printf("Hello, Jide, Lets do this together\n");
+	printf("Hello, Jide Lets do this together\n");
 	return (0);
 }
