@@ -7,9 +7,6 @@
  */
 int main(void)
 {
-	char *message = "Hello, Betty!";
-
-	printf("%s\n", message);
 	return (0);
 }
 
