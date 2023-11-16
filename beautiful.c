@@ -1,11 +1,15 @@
-#include "shell.h"
-/**
-* main - greetings to my partner
-* Return: Always zero
-*/
+#include <stdio.h>
 
+/**
+ * main - Entry point of the program
+ *
+ * Return: 0 on success, otherwise an error code
+ */
 int main(void)
 {
-	printf("Hello, Jide Lets do this together\n");
+	char *message = "Hello, Betty!";
+
+	printf("%s\n", message);
 	return (0);
 }
+
