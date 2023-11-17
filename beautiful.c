@@ -1,18 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 /**
  * main - Entry point of the program
  *
  * Return: Always 0 (Success)
  */
-
 int main(void)
 {
-	char message[] = "Hello, Jide, Lets do this together\n";
+	char *message = malloc(50 * sizeof(char));
 
-	write(STDOUT_FILENO, message, sizeof(message) - 1);
+	if (message == NULL)
+	{
+	perror("Error in allocating memory");
+		return (EXIT_FAILURE);
+	}
 
-	return (0);
+	sprintf(message, "Beautiful code that passes Betty checks\n");
+	write(STDOUT_FILENO, message, strlen(message));
+
+	free(message);
+	return (EXIT_SUCCESS);
 }
-

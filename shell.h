@@ -8,4 +8,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+void fav_print(const char *message)
+
 #endif
