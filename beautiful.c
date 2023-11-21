@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -10,6 +9,9 @@
  */
 int main(void)
 {
-	printf("My name is Favour and my partner is Jide\n");
+	char message[] = "My name is Favour and my partner is Jide\n";
+
+	write(STDOUT_FILENO, message, strlen(message));
 	return (0);
 }
+
