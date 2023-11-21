@@ -10,17 +10,6 @@
  */
 int main(void)
 {
-	char *message = malloc(50 * sizeof(char));
-
-	if (message == NULL)
-	{
-	perror("Error in allocating memory");
-		return (EXIT_FAILURE);
-	}
-
-	sprintf(message, "Beautiful code that passes Betty checks\n");
-	write(STDOUT_FILENO, message, strlen(message));
-
-	free(message);
-	return (EXIT_SUCCESS);
+	printf("My name is Favour and my partner is Jide\n");
+	return(0);
 }
