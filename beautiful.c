@@ -11,5 +11,5 @@
 int main(void)
 {
 	printf("My name is Favour and my partner is Jide\n");
-	return(0);
+	return (0);
 }
